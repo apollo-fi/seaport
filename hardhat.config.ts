@@ -10,6 +10,15 @@ import "@nomiclabs/hardhat-etherscan";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
+import "hardhat-deploy"
+import dotenv from "dotenv"
+
+dotenv.config()
+
+const {
+  ACCOUNT_PRIVATE_KEYS,
+  TESTNET_API = "https://data-seed-prebsc-1-s3.binance.org:8545/" //"https://goerli.prylabs.net/"
+} = process.env
 
 // Filter Reference Contracts
 subtask(TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS).setAction(
@@ -78,6 +87,11 @@ const config: HardhatUserConfig = {
     verificationNetwork: {
       url: process.env.NETWORK_RPC ?? "",
     },
+    testnet: {
+      url: TESTNET_API,
+      gas: 6990000,
+      gasPrice: 10000000000,
+    }
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
@@ -88,6 +102,22 @@ const config: HardhatUserConfig = {
   },
   // specify separate cache for hardhat, since it could possibly conflict with foundry's
   paths: { cache: "hh-cache" },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+      5: 0
+    }
+  }
 };
+
+if (ACCOUNT_PRIVATE_KEYS) {
+  config.networks = {
+    ...config.networks,
+    testnet: {
+      ...config.networks?.testnet,
+      accounts: JSON.parse(ACCOUNT_PRIVATE_KEYS),
+    }
+  }
+}
 
 export default config;
