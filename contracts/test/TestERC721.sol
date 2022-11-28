@@ -11,6 +11,6 @@ contract TestERC721 is ERC721("Test721", "TST721") {
     }
 
     function tokenURI(uint256) public pure override returns (string memory) {
-        return "tokenURI";
+        return "ipfs://QmdJ8S7YfZmXQJYdieyHJhNpAUnqQ8KEQsgZ4EAdwYk7tx/1";
     }
 }

@@ -17,7 +17,8 @@ dotenv.config()
 
 const {
   ACCOUNT_PRIVATE_KEYS,
-  TESTNET_API = "https://data-seed-prebsc-1-s3.binance.org:8545/" //"https://goerli.prylabs.net/"
+  TESTNET_API = "https://data-seed-prebsc-1-s3.binance.org:8545/",
+  GOERLI_API = "https://eth-goerli.g.alchemy.com/v2/_vBWvr4NcTiQSnTSLN8d199QhtYWuvLs"
 } = process.env
 
 // Filter Reference Contracts
@@ -91,6 +92,11 @@ const config: HardhatUserConfig = {
       url: TESTNET_API,
       gas: 6990000,
       gasPrice: 10000000000,
+    },
+    goerli: {
+      url: GOERLI_API,
+      gas: 8000000,
+      gasPrice: 20000000000,
     }
   },
   gasReporter: {
@@ -115,6 +121,10 @@ if (ACCOUNT_PRIVATE_KEYS) {
     ...config.networks,
     testnet: {
       ...config.networks?.testnet,
+      accounts: JSON.parse(ACCOUNT_PRIVATE_KEYS),
+    },
+    goerli: {
+      ...config.networks?.goerli,
       accounts: JSON.parse(ACCOUNT_PRIVATE_KEYS),
     }
   }
